@@ -127,3 +127,15 @@ function imprimirEtiqueta() {
         };
     }
 }
+
+// Función para limpiar solo los campos de entrada sin borrar las etiquetas generadas
+function limpiarPagina() {
+    // Limpiar los campos de texto, pero no tocar las etiquetas generadas
+    document.getElementById('numero-input').value = '';
+    document.getElementById('codigo-input').value = '';
+    document.getElementById('numero2-input').value = '';
+    document.getElementById('codigo2-input').value = '';
+    document.getElementById('cantidad-input').value = 1;
+  
+   generarEtiqueta();
+}
