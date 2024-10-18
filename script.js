@@ -10,15 +10,29 @@ function generarEtiqueta() {
     const numero2Etiqueta = document.getElementById('numero2-etiqueta');
     const qrCode2 = document.getElementById('qr-code2');
 
-    if (numero && codigo && numero2 && codigo2) {
-        numeroEtiqueta.textContent = numero;
-        qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo)}`;
-        numero2Etiqueta.textContent = numero2;
-        qrCode2.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo2)}`;
-        etiqueta.style.display = 'flex';
-
+    // Mostrar el primer código QR si hay datos en 'numero' y 'codigo'
+    if (numero || codigo) {
+        numeroEtiqueta.textContent = numero || '';
+        qrCode.src = codigo ? `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo)}` : '';
         ajustarTexto(numeroEtiqueta);
+    } else {
+        qrCode.src = ''; // Limpiar el QR si no hay datos
+    }
+
+    // Mostrar el segundo código QR si hay datos en 'numero2' y 'codigo2'
+    if (numero2 || codigo2) {
+        numero2Etiqueta.textContent = numero2 || '';
+        qrCode2.src = codigo2 ? `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo2)}` : '';
         ajustarTexto(numero2Etiqueta);
+    } else {
+        qrCode2.src = ''; // Limpiar el QR si no hay datos
+    }
+
+    // Mostrar la etiqueta si hay al menos un código QR generado
+    if (numero || codigo || numero2 || codigo2) {
+        etiqueta.style.display = 'flex';
+    } else {
+        etiqueta.style.display = 'none'; // Ocultar la etiqueta si no hay datos
     }
 }
 
@@ -113,3 +127,4 @@ function imprimirEtiqueta() {
         };
     }
 }
+
