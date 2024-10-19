@@ -1,39 +1,47 @@
 function generarEtiqueta() {
-    const numero = document.getElementById('numero-input').value;
-    const codigo = document.getElementById('codigo-input').value;
-    const numero2 = document.getElementById('numero2-input').value;
-    const codigo2 = document.getElementById('codigo2-input').value;
+    // Obtener los valores actuales de los campos
+    const numero = document.getElementById('numero-input').value.trim();
+    const codigo = document.getElementById('codigo-input').value.trim();
+    const numero2 = document.getElementById('numero2-input').value.trim();
+    const codigo2 = document.getElementById('codigo2-input').value.trim();
 
+    // Obtener referencias a los elementos de la etiqueta
     const etiqueta = document.getElementById('etiqueta');
     const numeroEtiqueta = document.getElementById('numero-etiqueta');
     const qrCode = document.getElementById('qr-code');
     const numero2Etiqueta = document.getElementById('numero2-etiqueta');
     const qrCode2 = document.getElementById('qr-code2');
 
-    // Mostrar el primer código QR si hay datos en 'numero' y 'codigo'
+    // Limpiar todos los elementos primero
+    numeroEtiqueta.textContent = '';
+    qrCode.src = '';
+    numero2Etiqueta.textContent = '';
+    qrCode2.src = '';
+
+    // Verificar y mostrar primer conjunto de datos
     if (numero || codigo) {
-        numeroEtiqueta.textContent = numero || '';
-        qrCode.src = codigo ? `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo)}` : '';
-        ajustarTexto(numeroEtiqueta);
-    } else {
-        qrCode.src = ''; // Limpiar el QR si no hay datos
+        if (numero) {
+            numeroEtiqueta.textContent = numero;
+            ajustarTexto(numeroEtiqueta);
+        }
+        if (codigo) {
+            qrCode.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo)}`;
+        }
     }
 
-    // Mostrar el segundo código QR si hay datos en 'numero2' y 'codigo2'
+    // Verificar y mostrar segundo conjunto de datos solo si se ingresaron
     if (numero2 || codigo2) {
-        numero2Etiqueta.textContent = numero2 || '';
-        qrCode2.src = codigo2 ? `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo2)}` : '';
-        ajustarTexto(numero2Etiqueta);
-    } else {
-        qrCode2.src = ''; // Limpiar el QR si no hay datos
+        if (numero2) {
+            numero2Etiqueta.textContent = numero2;
+            ajustarTexto(numero2Etiqueta);
+        }
+        if (codigo2) {
+            qrCode2.src = `https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(codigo2)}`;
+        }
     }
 
-    // Mostrar la etiqueta si hay al menos un código QR generado
-    if (numero || codigo || numero2 || codigo2) {
-        etiqueta.style.display = 'flex';
-    } else {
-        etiqueta.style.display = 'none'; // Ocultar la etiqueta si no hay datos
-    }
+    // Mostrar u ocultar la etiqueta según si hay datos
+    etiqueta.style.display = (numero || codigo || numero2 || codigo2) ? 'flex' : 'none';
 }
 
 function ajustarTexto(element) {
@@ -46,6 +54,22 @@ function ajustarTexto(element) {
         element.style.fontSize = fontSize + 'pt';
         if (fontSize <= 6) break;
     }
+}
+
+function limpiarPagina() {
+    // Limpiar campos de entrada
+    document.getElementById('numero-input').value = '';
+    document.getElementById('codigo-input').value = '';
+    document.getElementById('numero2-input').value = '';
+    document.getElementById('codigo2-input').value = '';
+    document.getElementById('cantidad-input').value = '1';
+
+    // Limpiar completamente la visualización
+    document.getElementById('numero-etiqueta').textContent = '';
+    document.getElementById('qr-code').src = '';
+    document.getElementById('numero2-etiqueta').textContent = '';
+    document.getElementById('qr-code2').src = '';
+    document.getElementById('etiqueta').style.display = 'none';
 }
 
 function imprimirEtiqueta() {
@@ -126,16 +150,4 @@ function imprimirEtiqueta() {
             }, 500);
         };
     }
-}
-
-// Función para limpiar solo los campos de entrada sin borrar las etiquetas generadas
-function limpiarPagina() {
-    // Limpiar los campos de texto, pero no tocar las etiquetas generadas
-    document.getElementById('numero-input').value = '';
-    document.getElementById('codigo-input').value = '';
-    document.getElementById('numero2-input').value = '';
-    document.getElementById('codigo2-input').value = '';
-    document.getElementById('cantidad-input').value = 1;
-  
-   generarEtiqueta();
 }
